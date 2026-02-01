@@ -45,19 +45,24 @@ function bootSequence(key) {
   setTimeout(() => { panicSequence(0); }, 2000);
 }
 
+// ... [Keep LOGO_ASCII and PANIC_STRINGS from before] ...
+
 function panicSequence(count) {
   if (!consoleEl.classList.contains("panic")) {
     consoleEl.classList.add("panic");
   }
 
   const randomText = PANIC_STRINGS[Math.floor(Math.random() * PANIC_STRINGS.length)];
-  consoleEl.textContent += `\n> [PANIC]: ${randomText}`;
+  
+  // Create a new line element to ensure clean scrolling
+  const line = document.createElement("div");
+  line.textContent = `> [PANIC]: ${randomText}`;
+  consoleEl.appendChild(line);
 
-  // Infinite scroll
+  // Auto-scroll to the bottom of the body
   window.scrollTo(0, document.body.scrollHeight);
   
-  // Speed ramps up then caps
-  const nextDelay = Math.max(40, 400 - (count * 10));
+  const nextDelay = Math.max(50, 400 - (count * 10));
   setTimeout(() => panicSequence(count + 1), nextDelay);
 }
 
