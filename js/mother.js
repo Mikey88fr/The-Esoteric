@@ -18,15 +18,24 @@ function init() {
   window.addEventListener("keydown", handleChoice, { once: true });
 }
 
+// ... [Keep your existing LOGO_ASCII and constants] ...
+
 function handleChoice(e) {
   const key = e.key.toUpperCase();
   if (key === 'Y' || key === 'N') {
-    if (Math.random() > 0.5) { eject(key); } 
-    else { bootSequence(key); }
+    // 0.3 means only 30% chance to get ejected. You'll win 70% of the time.
+    if (Math.random() < 0.3) { 
+      eject(key); 
+    } else { 
+      bootSequence(key); 
+    }
   } else {
+    // Keep listening if they hit the wrong key
     window.addEventListener("keydown", handleChoice, { once: true });
   }
 }
+
+// ... [Keep the rest of your functions] ...
 
 function eject(key) {
   consoleEl.textContent += key + "\n\n> VERDICT: INCORRECT. EJECTING...";
