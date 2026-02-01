@@ -12,7 +12,7 @@ STATION: ███████████████████████�
 
 I. ██████████████ OVERVIEW
 
-The following ████████████████████ pertains to the ████████████ of the TRN-7 system. This ████ was recovered from a CYBORG-15 terminal in a state of ████████████. All personnel are ██████ that per Directive ██-██, knowledge of the ████████ protocol is strictly ████████████████████████ to ████████ and those with a ██% or higher ████████ threshold.
+The following ████████████████████ pertains to the ████████████ of the TRN-7 system. This ████ was recovered from a terminal in a state of ████████████. All personnel are ██████ that per Directive ██-██, knowledge of the ████████ protocol is strictly ████████████████████████ to ████████ and those with a ██% or higher ████████ threshold.
 
 AUDIT TRAIL:
 
