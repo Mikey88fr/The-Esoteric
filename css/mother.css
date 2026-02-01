@@ -8,77 +8,57 @@ body {
   margin: 0; background: var(--bg); height: 100vh;
   display: flex; justify-content: center; align-items: center;
   font-family: 'IBM Plex Mono', monospace; overflow: hidden;
-  /* Global Flicker */
   animation: crt-flicker 0.15s infinite;
 }
 
-.monitor-housing {
-  position: relative;
-  width: 100vw; height: 100vh;
-  display: flex; justify-content: center; align-items: center;
-}
-
+/* The Secret Curve: Pushed off-screen */
 .console {
-  width: 90%; height: 85%;
-  padding: 50px;
+  width: 110vw; height: 110vh; /* Scaled up to hide edges */
+  padding: 10vh 15vw;
   background: radial-gradient(circle, #1a0d06 0%, #050201 100%);
-  /* The Secret Sauce: Curve without visible borders */
-  clip-path: ellipse(70% 85% at 50% 50%);
-  transform: scale(1.1); /* Pulls edges off-screen slightly */
+  clip-path: ellipse(75% 80% at 50% 50%);
   position: relative;
+  display: flex; flex-direction: column;
 }
 
-/* Scanlines & Static Overlay */
+/* Layer 1: Scanlines & Static */
 .console::before {
   content: " ";
-  display: block; position: absolute; inset: 0;
+  position: absolute; inset: 0;
   background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-  z-index: 2;
-  background-size: 100% 3px, 3px 100%;
-  pointer-events: none;
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    repeating-linear-gradient(0deg, transparent 0px, rgba(0,0,0,0.05) 1px, transparent 2px);
+  background-size: 100% 4px;
+  z-index: 5; pointer-events: none;
+}
+
+/* Layer 2: Vague Room Reflection */
+.console::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(255,255,255,0.01) 100%);
+  pointer-events: none; z-index: 6;
 }
 
 #console-text {
   color: var(--fg);
-  text-shadow: 0 0 12px var(--glow);
-  line-height: 1.4;
-  position: relative;
-  z-index: 1;
+  text-shadow: 0 0 10px var(--glow);
+  line-height: 1.5; font-size: 1.2rem;
+  white-space: pre-wrap;
 }
 
-/* CRT Voltage Flickering */
-@keyframes crt-flicker {
-  0% { opacity: 0.985; }
-  5% { opacity: 0.99; }
-  10% { opacity: 0.98; }
-  15% { opacity: 0.995; }
-  100% { opacity: 1; }
-}
-
-/* The Bloom grows as the panic continues */
+/* The Panic Bloom */
 .panic {
-  animation: glitch 0.1s infinite;
-  /* This creates the 'heavy' industrial glow you liked in the TRN logo */
-  text-shadow: 
-    0 0 5px var(--fg),
-    0 0 15px var(--glow),
-    0 0 30px #ff4500;
-  transition: text-shadow 2s ease-in-out;
+  animation: vhs-jitter 0.1s infinite;
+  text-shadow: 0 0 15px #ff8c00, 0 0 30px #ff4500 !important;
 }
 
-/* Subtle jitter for the whole terminal */
-@keyframes glitch {
-  0% { transform: translate(0,0) skew(0deg); }
-  20% { transform: translate(-2px, 1px) skew(0.5deg); }
-  40% { transform: translate(2px, -1px) skew(-0.5deg); opacity: 0.8; }
-  60% { transform: translate(-1px, -2px) opacity: 1; }
-  80% { transform: translate(2px, 2px); }
-  100% { transform: translate(0,0); }
+@keyframes vhs-jitter {
+  0% { transform: translate(0,0); filter: hue-rotate(0deg); }
+  50% { transform: translate(-1px, 1px); filter: hue-rotate(2deg); }
+  100% { transform: translate(1px, -1px); }
 }
 
-@keyframes bloom {
-  from { text-shadow: 0 0 10px var(--glow); }
-  to { text-shadow: 0 0 35px #ff4500, 0 0 60px #ff0000; }
+@keyframes crt-flicker {
+  0% { opacity: 0.99; } 50% { opacity: 1; } 100% { opacity: 0.98; }
 }
