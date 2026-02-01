@@ -17,21 +17,34 @@ const LOGO_ASCII = `
     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
 function init() {
-  // Ensure input is focused for mobile users
-  document.addEventListener("click", () => mobileInput.focus());
+  // 1. Mobile & Tablet Setup
+  // Tapping anywhere on the screen forces focus to the hidden input
+  document.addEventListener("click", () => {
+    mobileInput.focus();
+  });
   mobileInput.focus();
 
+  // 2. Mobile Logic: Catch characters from the virtual keyboard
   mobileInput.addEventListener("input", (e) => {
-    // Get the last character entered
     const val = e.target.value.toUpperCase();
-    const char = val.slice(-1); 
+    const char = val.slice(-1); // Get the last character typed
 
     if (char === 'Y' || char === 'N') {
       handleChoice(char);
-      mobileInput.disabled = true; // Prevents double-triggering
+      mobileInput.disabled = true; // Lock input after choice
     }
     e.target.value = ""; // Clear for next potential input
   });
+
+  // 3. Desktop Logic: Catch physical key presses
+  window.addEventListener("keydown", (e) => {
+    const key = e.key.toUpperCase();
+    if (key === 'Y' || key === 'N') {
+      // Prevents the letter from actually being typed elsewhere
+      e.preventDefault(); 
+      handleChoice(key);
+    }
+  }, { once: true }); // 'once' prevents the script from restarting if keys are mashed
 }
 
 function handleChoice(key) {
