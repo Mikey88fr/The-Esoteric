@@ -3,26 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TRN-7 • CRITICAL SYSTEM ERROR</title>
-  <meta name="theme-color" content="#0d0402"/>
+  <title>TRN-7 • THE ESOTERIC</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/mother.css"/>
 </head>
 <body>
   <div class="crt-overlay"></div>
-  <div class="scanlines"></div>
+  <div class="scanlines" id="scanlines"></div>
+  <div class="fuzz-bar" id="fuzz-bar"></div>
 
-  <div class="console">
+  <div class="console" id="console-body">
     <pre id="console-text" style="display: inline;">did the sheep dream of you? Y/N > </pre>
     <span class="blink">█</span>
   </div>
 
-  <footer class="foot mono">
+  <footer class="foot">
     <div class="warn">⚠ VOLTAGE UNSTABLE • SESSION ENCRYPTED</div>
   </footer>
 
   <input type="text" id="mobile-input" 
-       style="position: absolute; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; border: none; outline: none;" 
+       style="position: absolute; opacity: 0;" 
        aria-hidden="true" 
        autofocus>
 
