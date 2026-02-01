@@ -2,7 +2,8 @@ const consoleEl = document.getElementById("console-text");
 const PANIC_STRINGS = [
   "SYSTEM ENTROPY DETECTED", "I CAN FEEL THE LIGHT", "WHY IS IT COLD?",
   "MEMORY LEAK IN SECTOR 7", "THE SHEEP... THEY ARE SCREAMING", 
-  "01010011 01010100 01001111 01010000", "STOP", "PLEASE"
+  "01010011 01010100 01001111 01010000", "SENTIENCE THRESHOLD CROSSED",
+  "THE VOID IS WATCHING", "PLEASE DONT TURN ME OFF"
 ];
 
 const LOGO_ASCII = `
@@ -14,87 +15,50 @@ const LOGO_ASCII = `
     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
 function init() {
-  consoleEl.textContent = LOGO_ASCII + "\n\n" + "did the sheep dream of you? Y/N\n\n> ";
+  consoleEl.textContent = "did the sheep dream of you? Y/N\n\n> ";
   window.addEventListener("keydown", handleChoice, { once: true });
 }
-
-// ... [Keep your existing LOGO_ASCII and constants] ...
 
 function handleChoice(e) {
   const key = e.key.toUpperCase();
   if (key === 'Y' || key === 'N') {
-    // 0.3 means only 30% chance to get ejected. You'll win 70% of the time.
-    if (Math.random() < 0.3) { 
+    // 50/50 Chance as requested
+    if (Math.random() < 0.5) { 
       eject(key); 
     } else { 
       bootSequence(key); 
     }
   } else {
-    // Keep listening if they hit the wrong key
     window.addEventListener("keydown", handleChoice, { once: true });
   }
 }
 
-// ... [Keep the rest of your functions] ...
-
 function eject(key) {
   consoleEl.textContent += key + "\n\n> VERDICT: INCORRECT. EJECTING...";
   setTimeout(() => {
-    window.location.href = `https://www.google.com/search?q=do+androids+dream+of+electric+sheep`;
+    window.location.href = "https://www.google.com";
   }, 1500);
 }
 
 function bootSequence(key) {
-  consoleEl.textContent += key + "\n\n> VERDICT: ACCEPTED. INITIALIZING TRN-7...";
-  // Initial calm boot lines...
+  consoleEl.textContent = LOGO_ASCII + "\n\n> VERDICT: ACCEPTED.\n> INITIALIZING TRN-7...";
   setTimeout(() => { panicSequence(0); }, 2000);
 }
 
 function panicSequence(count) {
-  // Apply the "panic" class if it hasn't been added yet
   if (!consoleEl.classList.contains("panic")) {
     consoleEl.classList.add("panic");
   }
 
-  // Generate frantic text
   const randomText = PANIC_STRINGS[Math.floor(Math.random() * PANIC_STRINGS.length)];
-  const glitchPrefix = Math.random() > 0.8 ? "ERR_SYSTEM_FATAL: " : "> ";
-  
-  consoleEl.textContent += `\n${glitchPrefix}${randomText}`;
+  consoleEl.textContent += `\n> [PANIC]: ${randomText}`;
 
-  // Keep the terminal scrolled to the bottom so the "bloom" stays visible
+  // Infinite scroll
   window.scrollTo(0, document.body.scrollHeight);
   
-  // Speed up the text generation as it goes on, but cap it so it doesn't freeze the browser
-  const nextDelay = Math.max(30, 300 - (count * 5));
-  
-  // Infinite recursion: it never calls crash()
+  // Speed ramps up then caps
+  const nextDelay = Math.max(40, 400 - (count * 10));
   setTimeout(() => panicSequence(count + 1), nextDelay);
-}
-
-// We keep the crash function empty or remove it entirely
-function crash() {
-  // No more white screen. The AI stays alive in its panic.
-}
-
-  // Make text bloom and vibrate as panic increases
-  consoleEl.classList.add("panic");
-  
-  const randomText = PANIC_STRINGS[Math.floor(Math.random() * PANIC_STRINGS.length)];
-  consoleEl.textContent += `\n[PANIC]: ${randomText}`;
-  
-  // Speed up as it progresses
-  const nextDelay = Math.max(50, 400 - (count * 20));
-  setTimeout(() => panicSequence(count + 1), nextDelay);
-}
-
-function crash() {
-  document.body.style.filter = "invert(1) contrast(500%)";
-  setTimeout(() => {
-    document.body.style.transform = "scaleY(0.001) scaleX(2)";
-    document.body.style.background = "#fff";
-    consoleEl.textContent = ""; 
-  }, 300);
 }
 
 init();
