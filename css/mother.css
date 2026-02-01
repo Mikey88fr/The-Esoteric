@@ -5,60 +5,70 @@
 }
 
 body {
-  margin: 0; background: var(--bg); height: 100vh;
-  display: flex; justify-content: center; align-items: center;
-  font-family: 'IBM Plex Mono', monospace; overflow: hidden;
-  animation: crt-flicker 0.15s infinite;
-}
-
-/* The Secret Curve: Pushed off-screen */
-.console {
-  width: 110vw; height: 110vh; /* Scaled up to hide edges */
-  padding: 10vh 15vw;
-  background: radial-gradient(circle, #1a0d06 0%, #050201 100%);
-  clip-path: ellipse(75% 80% at 50% 50%);
-  position: relative;
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  height: 100vh; width: 100vw;
+  font-family: 'IBM Plex Mono', monospace;
+  overflow: hidden;
   display: flex; flex-direction: column;
+  animation: crt-flicker 0.1s infinite;
 }
 
-/* Layer 1: Scanlines & Static */
-.console::before {
-  content: " ";
-  position: absolute; inset: 0;
-  background: 
-    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-    repeating-linear-gradient(0deg, transparent 0px, rgba(0,0,0,0.05) 1px, transparent 2px);
-  background-size: 100% 4px;
-  z-index: 5; pointer-events: none;
+/* 1. Full CRT Curve & Reflection */
+.console {
+  flex: 1;
+  padding: 10vh 10vw;
+  /* Perspective creates the 'bulge' without a visible box edge */
+  transform: perspective(1000px) rotateX(1deg) scale(1.05);
+  background: radial-gradient(circle at center, #1a0d06 0%, #050201 100%);
+  z-index: 1;
 }
 
-/* Layer 2: Vague Room Reflection */
-.console::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 40%, rgba(255,255,255,0.01) 100%);
-  pointer-events: none; z-index: 6;
+/* 2. Scanlines & Static (Point 3) */
+.scanlines {
+  position: fixed; inset: 0; z-index: 10; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.2) 0px,
+    rgba(0, 0, 0, 0.2) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+}
+
+/* 3. VHS Glitch & Glow (Point 3 & 6) */
+.crt-overlay {
+  position: fixed; inset: 0; z-index: 11; pointer-events: none;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 3px, 3px 100%;
 }
 
 #console-text {
-  color: var(--fg);
+  font-size: 1.4rem; line-height: 1.6;
   text-shadow: 0 0 10px var(--glow);
-  line-height: 1.5; font-size: 1.2rem;
   white-space: pre-wrap;
+  margin: 0;
 }
 
 /* The Panic Bloom */
 .panic {
-  animation: vhs-jitter 0.1s infinite;
+  animation: vhs-jitter 0.15s infinite;
   text-shadow: 0 0 15px #ff8c00, 0 0 30px #ff4500 !important;
 }
 
+/* Animations */
 @keyframes vhs-jitter {
-  0% { transform: translate(0,0); filter: hue-rotate(0deg); }
-  50% { transform: translate(-1px, 1px); filter: hue-rotate(2deg); }
+  0% { transform: translate(0,0) skew(0deg); filter: blur(0.5px); }
+  50% { transform: translate(-2px, 1px) skew(1deg); filter: blur(1px) hue-rotate(5deg); }
   100% { transform: translate(1px, -1px); }
 }
 
 @keyframes crt-flicker {
-  0% { opacity: 0.99; } 50% { opacity: 1; } 100% { opacity: 0.98; }
+  0% { opacity: 0.98; } 50% { opacity: 1; } 100% { opacity: 0.99; }
 }
+
+.foot { position: fixed; bottom: 20px; width: 100%; text-align: center; opacity: 0.6; font-size: 0.8rem; }
+.blink { animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
