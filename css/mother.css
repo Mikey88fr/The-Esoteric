@@ -1,51 +1,54 @@
 :root {
-  --bg: #070201;
-  --fg: #ff8c00;
+  --bg: #050201;
+  --fg: #ff8c00; /* Burnt Orange */
   --dim: #5c2d11;
-  --glow: rgba(255, 140, 0, 0.4);
+  --glow: rgba(255, 140, 0, 0.6);
 }
 
-body, html { 
-  height: 100%; margin: 0; background: var(--bg); 
+body {
+  margin: 0; background: var(--bg); height: 100vh;
   display: flex; justify-content: center; align-items: center;
   font-family: 'IBM Plex Mono', monospace; overflow: hidden;
 }
 
-/* THE CRT SHELL */
-.console {
-  width: 85vw; height: 80vh;
-  max-width: 1000px;
+/* Simulated CRT Glass Bulge */
+.monitor-housing {
+  background: #1a1a1a; padding: 40px; border-radius: 60px;
+  border: 4px solid #2a1b15; box-shadow: 0 50px 100px #000;
   position: relative;
-  background: #120805;
-  border: 10px solid #1a1a1a; /* Thick plastic bezel */
-  border-radius: 40px / 100px; /* Physical curvature */
-  box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 100px #000;
-  display: flex; flex-direction: column; padding: 40px;
-  transform: perspective(1000px) rotateX(2deg);
 }
 
-/* THE GLASS & REFLECTION */
-.console::before {
-  content: ""; position: absolute; inset: 0; z-index: 5;
+.console {
+  width: 85vw; height: 75vh; max-width: 950px; padding: 40px;
+  background: #120805; border-radius: 50% / 10%; /* Physical Curve */
+  position: relative; overflow: hidden;
+  box-shadow: inset 0 0 100px #000;
+  transform: perspective(1000px) rotateX(1deg);
+}
+
+/* The "Vague Reflection" and Scanlines */
+.console::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.02) 0%, transparent 50%),
-    radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.4) 100%);
-  pointer-events: none; border-radius: inherit;
-}
-
-.console-inner {
-  flex: 1; overflow: hidden; position: relative;
-  display: flex; flex-direction: column; justify-content: flex-start;
+    linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 2px, transparent 4px);
+  z-index: 10;
 }
 
 #console-text {
-  font-size: 1.1rem; line-height: 1.4; color: var(--fg);
-  text-shadow: 0 0 8px var(--glow); white-space: pre-wrap;
+  color: var(--fg); text-shadow: 0 0 8px var(--glow);
+  white-space: pre-wrap; line-height: 1.4; font-size: 1.1rem;
+  transition: text-shadow 0.1s ease;
 }
 
-/* ASCII LOGO STYLE */
-.logo-text {
-  font-weight: 900; color: var(--fg); font-size: 0.8rem;
-  line-height: 1; letter-spacing: 2px; text-align: center;
-  display: block; margin-bottom: 2rem; opacity: 0.8;
+/* Haywire/Bloom State */
+.panic {
+  animation: jitter 0.1s infinite;
+  text-shadow: 0 0 20px #ff8c00, 0 0 40px #ff4500 !important;
+}
+
+@keyframes jitter {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-1px, 1px); }
+  75% { transform: translate(1px, -1px); }
 }
