@@ -51,10 +51,31 @@ function bootSequence(key) {
 }
 
 function panicSequence(count) {
-  if (count >= 20) {
-    crash();
-    return;
+  // Apply the "panic" class if it hasn't been added yet
+  if (!consoleEl.classList.contains("panic")) {
+    consoleEl.classList.add("panic");
   }
+
+  // Generate frantic text
+  const randomText = PANIC_STRINGS[Math.floor(Math.random() * PANIC_STRINGS.length)];
+  const glitchPrefix = Math.random() > 0.8 ? "ERR_SYSTEM_FATAL: " : "> ";
+  
+  consoleEl.textContent += `\n${glitchPrefix}${randomText}`;
+
+  // Keep the terminal scrolled to the bottom so the "bloom" stays visible
+  window.scrollTo(0, document.body.scrollHeight);
+  
+  // Speed up the text generation as it goes on, but cap it so it doesn't freeze the browser
+  const nextDelay = Math.max(30, 300 - (count * 5));
+  
+  // Infinite recursion: it never calls crash()
+  setTimeout(() => panicSequence(count + 1), nextDelay);
+}
+
+// We keep the crash function empty or remove it entirely
+function crash() {
+  // No more white screen. The AI stays alive in its panic.
+}
 
   // Make text bloom and vibrate as panic increases
   consoleEl.classList.add("panic");
