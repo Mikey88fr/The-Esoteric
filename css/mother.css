@@ -1,54 +1,67 @@
 :root {
   --bg: #050201;
-  --fg: #ff8c00; /* Burnt Orange */
-  --dim: #5c2d11;
-  --glow: rgba(255, 140, 0, 0.6);
+  --fg: #ff8c00; 
+  --glow: rgba(255, 140, 0, 0.45);
 }
 
 body {
   margin: 0; background: var(--bg); height: 100vh;
   display: flex; justify-content: center; align-items: center;
   font-family: 'IBM Plex Mono', monospace; overflow: hidden;
+  /* Global Flicker */
+  animation: crt-flicker 0.15s infinite;
 }
 
-/* Simulated CRT Glass Bulge */
 .monitor-housing {
-  background: #1a1a1a; padding: 40px; border-radius: 60px;
-  border: 4px solid #2a1b15; box-shadow: 0 50px 100px #000;
   position: relative;
+  width: 100vw; height: 100vh;
+  display: flex; justify-content: center; align-items: center;
 }
 
 .console {
-  width: 85vw; height: 75vh; max-width: 950px; padding: 40px;
-  background: #120805; border-radius: 50% / 10%; /* Physical Curve */
-  position: relative; overflow: hidden;
-  box-shadow: inset 0 0 100px #000;
-  transform: perspective(1000px) rotateX(1deg);
+  width: 90%; height: 85%;
+  padding: 50px;
+  background: radial-gradient(circle, #1a0d06 0%, #050201 100%);
+  /* The Secret Sauce: Curve without visible borders */
+  clip-path: ellipse(70% 85% at 50% 50%);
+  transform: scale(1.1); /* Pulls edges off-screen slightly */
+  position: relative;
 }
 
-/* The "Vague Reflection" and Scanlines */
-.console::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
+/* Scanlines & Static Overlay */
+.console::before {
+  content: " ";
+  display: block; position: absolute; inset: 0;
   background: 
-    linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%),
-    repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 2px, transparent 4px);
-  z-index: 10;
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 3px, 3px 100%;
+  pointer-events: none;
 }
 
 #console-text {
-  color: var(--fg); text-shadow: 0 0 8px var(--glow);
-  white-space: pre-wrap; line-height: 1.4; font-size: 1.1rem;
-  transition: text-shadow 0.1s ease;
+  color: var(--fg);
+  text-shadow: 0 0 12px var(--glow);
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
 }
 
-/* Haywire/Bloom State */
+/* CRT Voltage Flickering */
+@keyframes crt-flicker {
+  0% { opacity: 0.985; }
+  5% { opacity: 0.99; }
+  10% { opacity: 0.98; }
+  15% { opacity: 0.995; }
+  100% { opacity: 1; }
+}
+
 .panic {
-  animation: jitter 0.1s infinite;
-  text-shadow: 0 0 20px #ff8c00, 0 0 40px #ff4500 !important;
+  animation: glitch 0.2s infinite, bloom 0.5s ease-in-out;
 }
 
-@keyframes jitter {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(-1px, 1px); }
-  75% { transform: translate(1px, -1px); }
+@keyframes bloom {
+  from { text-shadow: 0 0 10px var(--glow); }
+  to { text-shadow: 0 0 35px #ff4500, 0 0 60px #ff0000; }
 }
