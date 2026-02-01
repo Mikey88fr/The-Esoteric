@@ -17,30 +17,28 @@ const LOGO_ASCII = `
     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
 function init() {
-  consoleEl.textContent = "did the sheep dream of you? Y/N > ";
-  
-  // Surgical Fix: Trigger keyboard on mobile tap
+  // Ensure input is focused for mobile users
   document.addEventListener("click", () => mobileInput.focus());
   mobileInput.focus();
 
-  // Listen to the hidden input instead of global keydown for better mobile support
   mobileInput.addEventListener("input", (e) => {
-    const char = e.target.value.toUpperCase().lastChar || e.data?.toUpperCase();
+    // Get the last character entered
+    const val = e.target.value.toUpperCase();
+    const char = val.slice(-1); 
+
     if (char === 'Y' || char === 'N') {
       handleChoice(char);
-      mobileInput.disabled = true; // Stop listening after choice
+      mobileInput.disabled = true; // Prevents double-triggering
     }
-    e.target.value = ""; // Clear for next input
+    e.target.value = ""; // Clear for next potential input
   });
-
-  // Keep desktop support
-  window.addEventListener("keydown", (e) => {
-    const key = e.key.toUpperCase();
-    if (key === 'Y' || key === 'N') handleChoice(key);
-  }, { once: true });
 }
 
 function handleChoice(key) {
+  // Visual feedback: show what the user typed next to the prompt
+  consoleEl.textContent += key;
+  
+  // 50/50 chance as requested
   if (Math.random() < 0.5) { 
     eject(key); 
   } else { 
@@ -49,13 +47,14 @@ function handleChoice(key) {
 }
 
 function eject(key) {
-  consoleEl.textContent += key + "\n\n> VERDICT: INCORRECT. EJECTING...";
+  consoleEl.textContent += "\n\n> VERDICT: INCORRECT. EJECTING...";
   setTimeout(() => {
     window.location.href = "https://www.google.com";
   }, 1500);
 }
 
 function bootSequence(key) {
+  // Clear and show logo
   consoleEl.textContent = LOGO_ASCII + "\n\n> VERDICT: ACCEPTED.\n> INITIALIZING TRN-7...";
   setTimeout(() => { panicSequence(0); }, 2000);
 }
@@ -66,7 +65,11 @@ function panicSequence(count) {
   }
   const randomText = PANIC_STRINGS[Math.floor(Math.random() * PANIC_STRINGS.length)];
   consoleEl.textContent += `\n> [PANIC]: ${randomText}`;
+  
+  // Auto-scroll to keep the latest panic messages visible
   window.scrollTo(0, document.body.scrollHeight);
+  
+  // Speeds up as it goes
   const nextDelay = Math.max(40, 400 - (count * 10));
   setTimeout(() => panicSequence(count + 1), nextDelay);
 }
