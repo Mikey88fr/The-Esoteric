@@ -43,7 +43,7 @@ function init() {
 function handleChoice(key) {
   consoleEl.textContent += key;
   // 35% Chance to Eject to Google
-  if (Math.random() < 0.35) { 
+  if (Math.random() < 0.40) { 
     eject(); 
   } else { 
     bootSequence(); 
