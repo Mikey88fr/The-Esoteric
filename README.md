@@ -8,7 +8,13 @@ CLASSIFICATION: ██████-LEVEL
 
 STATION: ████████████████████████████ 
 
-                                                                           ![Australian Commonwealth](./assets/coat-of-arms-conventional-web.png)
+---
+
+<div align="center">
+  <img src="./assets/coat-of-arms-conventional-web.png" alt="Australian Commonwealth Seal" width="180" style="opacity: 0.9; filter: grayscale(20%);"/>
+</div>
+
+---
 
 I. ██████████████ OVERVIEW
 
