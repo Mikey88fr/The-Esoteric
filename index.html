@@ -14,15 +14,16 @@
 <body>
   <main id="stage" aria-label="terminal stage">
     <div id="crt" class="crt">
-      <canvas id="noise" class="noise"></canvas>
-
-      <div class="glass" aria-hidden="true"></div>
-      <div class="scanlines" aria-hidden="true"></div>
-      <div class="vignette" aria-hidden="true"></div>
-      <div class="chromatic" aria-hidden="true"></div>
-      <div class="fuzz" id="fuzz" aria-hidden="true"></div>
-
       <section id="screen" class="screen" aria-label="terminal screen">
+        <!-- overlays now live INSIDE the screen so they aren't hidden behind it -->
+        <canvas id="noise" class="noise" aria-hidden="true" tabindex="-1"></canvas>
+
+        <div class="glass" aria-hidden="true"></div>
+        <div class="scanlines" aria-hidden="true"></div>
+        <div class="vignette" aria-hidden="true"></div>
+        <div class="chromatic" aria-hidden="true"></div>
+        <div class="fuzz" id="fuzz" aria-hidden="true"></div>
+
         <header class="topbar" aria-hidden="true">
           <div class="lamp"></div>
           <div class="lamp"></div>

@@ -108,16 +108,24 @@ body{
   min-height:0; /* keeps layout stable */
 }
 
+/* keep content below overlays but inside the same clipped screen */
+.topbar,
+.terminal{
+  position: relative;
+  z-index: 1;
+}
+
 .console{
   margin:0;
   flex:1;
   min-height:0;
-  overflow:hidden;
-  /* we will manage rolling buffer in JS */
+  overflow-y:auto;
+  overflow-x:hidden;
   white-space:pre-wrap;
   word-break:break-word;
   line-height: 1.28;
   font-size: clamp(13px, 1.65vw, 16px);
+  scrollbar-width: none; /* Firefox */
   
   /* RESTORED: "Burn-in" feel using orange shadows */
   text-shadow:
@@ -125,6 +133,10 @@ body{
     0 0 calc(10px + (var(--madness) * 10px)) rgba(255,140,0,0.35),
     0 0 calc(22px + (var(--madness) * 18px)) rgba(255,69,0,0.20); /* Deep orange/red outer glow */
   filter: blur(0.15px);
+}
+.console::-webkit-scrollbar{
+  width: 0;
+  height: 0;
 }
 
 .prompt{
@@ -162,7 +174,7 @@ body{
   opacity: 0.85;
 }
 
-/* ===== CRT overlays ===== */
+/* ===== CRT overlays (now inside .screen) ===== */
 
 .noise{
   position:absolute;
@@ -172,6 +184,7 @@ body{
   opacity: calc(0.22 + (var(--madness) * 0.28)); /* will be modulated in JS */
   mix-blend-mode: overlay;
   pointer-events:none;
+  z-index: 2;
 }
 
 .glass{
@@ -183,6 +196,7 @@ body{
     linear-gradient(90deg, rgba(255,255,255,0.04), transparent 18%, transparent 82%, rgba(255,255,255,0.03));
   opacity: 0.65;
   pointer-events:none;
+  z-index: 2;
 }
 
 .vignette{
@@ -190,11 +204,16 @@ body{
   inset:0;
   background: radial-gradient(closest-side at 50% 45%, transparent 58%, rgba(0,0,0,0.55) 100%);
   pointer-events:none;
+  z-index: 2;
 }
 
 .scanlines{
   position:absolute;
   inset:-10%;
+  border-radius: inherit;
+  pointer-events:none;
+  z-index: 3;
+
   background:
     repeating-linear-gradient(
       180deg,
@@ -204,7 +223,6 @@ body{
     );
   opacity: calc(0.36 + (var(--madness) * 0.22));
   mix-blend-mode: multiply;
-  pointer-events:none;
   animation: scanDrift 7s linear infinite;
 }
 @keyframes scanDrift{
@@ -223,6 +241,7 @@ body{
   mix-blend-mode: screen;
   opacity: 0.70;
   animation: chromaWander 9s ease-in-out infinite;
+  z-index: 2;
 }
 @keyframes chromaWander{
   0%{ transform: translate(0px, 0px); filter: blur(0.0px); }
@@ -231,7 +250,7 @@ body{
   100%{ transform: translate(0px, 0px); filter: blur(0.0px); }
 }
 
-/* VHS fuzz bar (activated by JS via opacity/transform) */
+/* VHS fuzz bar should be above everything */
 .fuzz{
   position:absolute;
   left: -20%;
@@ -240,20 +259,28 @@ body{
   top: 10%;
   opacity: 0;
   pointer-events:none;
-  mix-blend-mode: screen;
+  z-index: 4;
+
+  /* Visible VHS/AGC disturbance (no external art assets required) */
   background:
-    linear-gradient(180deg,
-      rgba(255,140,0,0.00),
-      rgba(255,140,0,0.15),
-      rgba(255,140,0,0.00)
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(255,140,0,0.10) 12%,
+      rgba(255,255,255,0.08) 25%,
+      rgba(0,0,0,0.45) 55%,
+      rgba(255,255,255,0.05) 78%,
+      transparent 100%
     ),
-    repeating-linear-gradient(90deg,
-      rgba(255,140,0,0.08) 0px,
-      rgba(255,140,0,0.00) 3px,
-      rgba(255,140,0,0.05) 6px
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      transparent 2px,
+      transparent 6px
     );
-  filter: blur(0.6px) contrast(1.2);
-  transform: translateY(0);
+  filter: blur(1px) contrast(1.15);
+  mix-blend-mode: screen;
 }
 
 /* global flicker / micro-jitter */
