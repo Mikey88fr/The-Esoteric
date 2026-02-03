@@ -4,31 +4,56 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TRN-7 • THE ESOTERIC</title>
-  <meta name="theme-color" content="#0d0402"/>
+  <meta name="theme-color" content="#050201"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/mother.css"/>
+  <link rel="stylesheet" href="./mother.css"/>
 </head>
+
 <body>
-  <!-- Overlay Effects -->
-  <div class="crt-overlay"></div>
-  <div class="scanlines" id="scan-layer"></div>
-  <div class="fuzz-bar" id="fuzz-layer"></div>
+  <main id="stage" aria-label="terminal stage">
+    <div id="crt" class="crt">
+      <canvas id="noise" class="noise" aria-hidden="true"></canvas>
 
-  <div class="console" id="console-body">
-    <pre id="console-text" style="display: inline;">did the sheep dream of you? Y/N > </pre>
-    <span class="blink">█</span>
-  </div>
+      <div class="glass" aria-hidden="true"></div>
+      <div class="scanlines" aria-hidden="true"></div>
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="chromatic" aria-hidden="true"></div>
+      <div class="fuzz" id="fuzz" aria-hidden="true"></div>
 
-  <footer class="foot mono">
-    <div class="warn">⚠ VOLTAGE UNSTABLE • SESSION ENCRYPTED</div>
-  </footer>
+      <section id="screen" class="screen" aria-label="terminal screen">
+        <header class="topbar" aria-hidden="true">
+          <div class="lamp"></div>
+          <div class="lamp"></div>
+          <div class="badge">TRN-7</div>
+        </header>
 
-  <!-- Essential Mobile Fix -->
-  <input type="text" id="mobile-input" 
-       style="position: absolute; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; border: none; outline: none;" 
-       aria-hidden="true" 
-       autofocus>
+        <div class="terminal">
+          <pre id="console" class="console" aria-live="polite"></pre>
 
-  <script src="./js/mother.js"></script>
+          <form id="promptForm" class="prompt" autocomplete="off">
+            <span class="prompt-label">></span>
+            <input
+              id="promptInput"
+              class="prompt-input"
+              type="text"
+              inputmode="text"
+              spellcheck="false"
+              autocapitalize="none"
+              autocomplete="off"
+              aria-label="terminal input"
+            />
+          </form>
+
+          <div class="hint" id="hint" aria-hidden="true">
+            AWAITING INPUT_
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script defer src="./mother.js"></script>
 </body>
 </html>
